@@ -13,16 +13,21 @@ const getRandomUser = async () => {
 	const data = await res.json();
 	const user = data.results[0];
 
-	// console.log(user);
-
 	const newUser = {
 		name: `${user.name.first} ${user.name.last}`,
-		nat: user.nat,
-		gender: user.gender,
 		money: Math.floor(Math.random() * 1000000)
 	};
 
 	addData(newUser);
+};
+
+// Double users' money
+const doubleMoney = () => {
+	data = data.map((item) => {
+		return { ...item, money: item.money * 2 };
+	});
+
+	updateDom();
 };
 
 // Add new object to data array
@@ -55,3 +60,4 @@ const formatMoney = (num) => {
 
 // Event listeners
 addUserBtn.addEventListener("click", getRandomUser);
+doubleBtn.addEventListener("click", doubleMoney);
