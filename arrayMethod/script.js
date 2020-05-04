@@ -37,6 +37,13 @@ const sortByRichest = () => {
 	updateDom();
 };
 
+// Filter only millionnaires
+const showMillionaires = () => {
+	data = data.filter((item) => item.money >= 1000000);
+
+	updateDom();
+};
+
 // Add new object to data array
 const addData = (obj) => {
 	data.push(obj);
@@ -69,3 +76,4 @@ const formatMoney = (num) => {
 addUserBtn.addEventListener("click", getRandomUser);
 doubleBtn.addEventListener("click", doubleMoney);
 sortBtn.addEventListener("click", sortByRichest);
+showMillionairesBtn.addEventListener("click", showMillionaires);
