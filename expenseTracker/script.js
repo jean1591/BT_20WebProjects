@@ -6,14 +6,41 @@ const form = document.getElementById("form");
 const text = document.getElementById("text");
 const amount = document.getElementById("amount");
 
-const dummyTransaction = [
-	{ id: 1, text: "Flower", amount: -20 },
-	{ id: 2, text: "Salary", amount: 300 },
-	{ id: 3, text: "Book", amount: -10 },
-	{ id: 4, text: "Camera", amount: 150 }
-];
+const localStorageTransactions = JSON.parse(localStorage.getItem("transactions"));
 
-let transactions = dummyTransaction;
+let transactions = localStorage.getItem("transactions") !== null ? localStorageTransactions : [];
+
+// Add transaction
+const addTransaction = (e) => {
+	e.preventDefault();
+
+	if (text.value.trim() === "" || amount.value.trim() === "") {
+		alert("Please add a text and amount");
+	} else {
+		const transaction = {
+			id: genId(),
+			text: text.value,
+			amount: +amount.value
+		};
+
+		transactions.push(transaction);
+
+		addTransactionDOM(transaction);
+
+		updateValues();
+
+		// Update localStorage
+		updateLocalStorage();
+
+		text.value = "";
+		amount.value = "";
+	}
+};
+
+// Generate random id
+const genId = () => {
+	return Math.floor(Math.random() * 100000000);
+};
 
 // Add transactions to DOM list
 const addTransactionDOM = (transaction) => {
@@ -28,7 +55,7 @@ const addTransactionDOM = (transaction) => {
 	item.innerHTML = `
     ${transaction.text} <span>${sign}${Math.abs(
 		transaction.amount
-	)}</span> <button class="delete-btn">X</button>
+	)}</span> <button class="delete-btn" onclick="removeTransaction(${transaction.id})">X</button>
   `;
 
 	// Add to history
@@ -53,6 +80,21 @@ const updateValues = () => {
 	moneyMinus.innerText = `$${expense}`;
 };
 
+// Remove transaction by id
+const removeTransaction = (id) => {
+	transactions = transactions.filter((transaction) => transaction.id !== id);
+
+	// Update localStorage
+	updateLocalStorage();
+
+	init();
+};
+
+// Update localStorage transactions
+const updateLocalStorage = () => {
+	localStorage.setItem("transactions", JSON.stringify(transactions));
+};
+
 // Init App
 const init = () => {
 	list.innerHTML = "";
@@ -62,3 +104,6 @@ const init = () => {
 };
 
 init();
+
+// Event listeners
+form.addEventListener("submit", addTransaction);
