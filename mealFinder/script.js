@@ -49,7 +49,19 @@ const searchMeal = async (e) => {
 const getMealById = async (mealId) => {
 	const res = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`);
 	const data = await res.json();
-	console.log(data);
+
+	const meal = data.meals[0];
+	addMealToDOM(meal);
+};
+
+// Fetch random meal from API
+const getRandomMeal = async () => {
+	// Clear meals & header
+	mealsEl.innerHTML = "";
+	resultHeading.innerHTML = "";
+
+	const res = await fetch("https://www.themealdb.com/api/json/v1/1/random.php");
+	const data = await res.json();
 
 	const meal = data.meals[0];
 	addMealToDOM(meal);
@@ -76,7 +88,7 @@ const addMealToDOM = (meal) => {
         ${meal.strArea ? `<p>${meal.strArea}</p>` : ""}
       </div>
       <div class="main">
-        <p>${meal.strInstruction}</p>
+        <p>${meal.strInstructions}</p>
         <h2>Ingredients</h2>
         <ul>
           ${ingredients.map((ing) => `<li>${ing}</li>`).join("")}
@@ -84,8 +96,6 @@ const addMealToDOM = (meal) => {
       </div>
     </div>
   `;
-
-	console.log(ingredients);
 };
 
 // Event listeners
@@ -105,3 +115,5 @@ mealsEl.addEventListener("click", (e) => {
 		getMealById(mealId);
 	}
 });
+
+random.addEventListener("click", getRandomMeal);
