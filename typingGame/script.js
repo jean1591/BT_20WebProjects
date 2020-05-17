@@ -2,7 +2,7 @@ const word = document.getElementById("word");
 const text = document.getElementById("text");
 const scoreEl = document.getElementById("score");
 const timeEl = document.getElementById("time");
-const endGame = document.getElementById("end-game");
+const endGame = document.getElementById("end-game-container");
 const settingBtn = document.getElementById("setting-btn");
 const settings = document.getElementById("settings");
 const settingsForm = document.getElementById("settings-form");
@@ -15,6 +15,35 @@ const words = [ "sigh", "tense", "airplane", "ball", "pies", "juice", "warlike",
 let randomWord;
 let score = 0;
 let time = 10;
+
+// Focus on text input on start
+text.focus();
+
+// Game Over, show end screen
+const gameOver = () => {
+	endGame.innerHTML = `
+    <h1>Time ran out</h1>
+    <p>Your final score is ${score}</p>
+    <button onclick="location.reload()">Play Again</button>
+  `;
+	endGame.style.display = "flex";
+};
+
+// Update time
+const updateTime = () => {
+	time--;
+	timeEl.innerHTML = `${time}s`;
+
+	if (time === 0) {
+		clearInterval();
+
+		// End game
+		gameOver();
+	}
+};
+
+// Start counting down
+const timeInterval = setInterval(updateTime, 1000);
 
 // Generate random word from array
 const getRandomWord = () => {
@@ -45,6 +74,9 @@ text.addEventListener("input", (e) => {
 
 		// Update score
 		updateScore();
+
+		// Update time
+		time += 5;
 
 		// Clear input
 		e.target.value = "";
