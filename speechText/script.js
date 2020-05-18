@@ -8,51 +8,51 @@ const closeBtn = document.getElementById("close");
 const data = [
 	{
 		image: "./img/drink.jpg",
-		text: "I'm Thirsty"
+		text: "J'ai soif"
 	},
 	{
 		image: "./img/food.jpg",
-		text: "I'm Hungry"
+		text: "J'ai faim"
 	},
 	{
 		image: "./img/tired.jpg",
-		text: "I'm Tired"
+		text: "Je suis fatigué"
 	},
 	{
 		image: "./img/hurt.jpg",
-		text: "I'm Hurt"
+		text: "J'ai mal"
 	},
 	{
 		image: "./img/happy.jpg",
-		text: "I'm Happy"
+		text: "Je suis content"
 	},
 	{
 		image: "./img/angry.jpg",
-		text: "I'm Angry"
+		text: "Je suis en colère"
 	},
 	{
 		image: "./img/sad.jpg",
-		text: "I'm Sad"
+		text: "Je suis triste"
 	},
 	{
 		image: "./img/scared.jpg",
-		text: "I'm Scared"
+		text: "J'ai peur"
 	},
 	{
 		image: "./img/outside.jpg",
-		text: "I Want To Go Outside"
+		text: "Je veux aller dehors"
 	},
 	{
 		image: "./img/home.jpg",
-		text: "I Want To Go Home"
+		text: "Je veux rentrer à la maison"
 	},
 	{
 		image: "./img/school.jpg",
-		text: "I Want To Go To School"
+		text: "Je veux aller à l'école"
 	},
 	{
 		image: "./img/grandma.jpg",
-		text: "I Want To Go To Grandmas"
+		text: "Je veux aller chez mamie"
 	}
 ];
 
@@ -112,6 +112,11 @@ const speakText = () => {
 	speechSynthesis.speak(message);
 };
 
+// Set voice
+const setVoice = (e) => {
+	message.voice = voices.find((voice) => voice.name === e.target.value);
+};
+
 data.forEach(createBox);
 
 // Event listener
@@ -127,5 +132,14 @@ toggleBtn.addEventListener("click", () =>
 closeBtn.addEventListener("click", () =>
 	document.getElementById("text-box").classList.remove("show")
 );
+
+// Change voice
+voicesSelect.addEventListener("change", setVoice);
+
+// Read text button
+readBtn.addEventListener("click", () => {
+	setTextMessage(textArea.value);
+	speakText();
+});
 
 getVoices();
